@@ -31,15 +31,19 @@ void readMemInfo(){
             meminfo.push_back(line);
         }
         inMemFile.close();
-        long long memtotal = extractValue(meminfo[0]);
-        long long memfree = extractValue(meminfo[1]);
-        long long memavailable = extractValue(meminfo[2]);
-        long long memused = memtotal - memavailable;
-        double memusedpercentage = static_cast<double>(memused) / memtotal * 100;
+        double memtotal = static_cast<double>(extractValue(meminfo[0]));
+        double memavailable = static_cast<double>(extractValue(meminfo[2]));
+        double memused = memtotal - memavailable;
+        double memusedpercentage = (memused / memtotal) * 100;
+        
+        memtotal /= (1024.0 * 1024.0);
+        memavailable /= (1024.0 * 1024.0);
+        memused /= (1024.0 * 1024.0);
 
         std::cout << "\n" << "Memory Info: " << "\n";
-        std::cout << "\n" << meminfo[0] << "\n" << meminfo[1] << "\n" << meminfo[2] << "\n";
-        std::cout << "MemUsed: " << std::setw(15) << memused << " kB" << "\n";
+        std::cout << "\n" << "MemTotal: " << std::setw(11) << std::fixed << std::setprecision(2) << memtotal << " GB" << "\n" ;
+        std::cout << "MemAvailable: " << std::setw(7) << memavailable << " GB" "\n";
+        std::cout << "MemUsed: " << std::setw(12) << memused << " GB" << "\n";
 
         if(memusedpercentage > 85.00){
             std::cout << "\033[1;31mWarning: High Memory Usage\033[0m" << "\n";
